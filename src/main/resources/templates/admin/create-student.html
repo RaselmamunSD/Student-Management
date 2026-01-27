@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Create Student Profile</title>
+    <link rel="stylesheet" th:href="@{/css/style-admin.css}">
+</head>
+
+<body>
+
+<h1>Create Student Profile</h1>
+
+<p>
+    Select the <strong>login username</strong> for which this student profile
+    will be created. A user can have only one student profile.
+</p>
+
+<form th:action="@{/admin/students/create}" th:object="${student}" method="post">
+
+    <label>Select User (Login Username):</label><br>
+    <select name="userId" required>
+        <option value="" disabled selected>-- Select Student User --</option>
+        <option th:each="u : ${users}"
+                th:value="${u.id}"
+                th:text="${u.username}">
+        </option>
+    </select>
+
+    <br><br>
+
+    <label>Name:</label><br>
+    <input type="text" th:field="*{name}" placeholder="Full Name" required />
+
+    <br><br>
+
+    <label>Email:</label><br>
+    <input type="email" th:field="*{email}" placeholder="student@example.com" required />
+
+    <br><br>
+
+    <label>Department:</label><br>
+    <input type="text" th:field="*{department}" placeholder="CSE / Mechanical / ECE" required />
+
+    <br><br>
+
+    <label>Program:</label><br>
+    <input type="text" th:field="*{program}" placeholder="B.Tech / M.Tech" />
+
+    <br><br>
+
+    <label>Current Semester:</label><br>
+    <input type="number" th:field="*{currentSemester}" min="1" max="10" />
+
+    <br><br>
+
+    <button type="submit">Create Student</button>
+
+</form>
+
+<br>
+
+<form th:action="@{/admin/users}" method="get">
+    <button>Back to Student Management</button>
+</form>
+
+<br><br>
+
+<form th:action="@{/dashboard}" method="get">
+    <button type="submit">Back to Dashboard</button>
+</form>
+
+<footer class="app-footer">
+    © 2026 Prathita Kumar Madhusudhana - Student Management System
+</footer>
+
+</body>
+</html>

@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<head>
+    <title>Dashboard</title>
+    <link rel="stylesheet" th:href="@{/css/style-dashboard.css}">
+</head>
+
+<body sec:authorize="isAuthenticated()"
+      th:classappend="
+        ${#authorization.expression('hasRole(''ADMIN'')')} ? 'admin-bg' :
+        (${#authorization.expression('hasRole(''FACULTY'')')} ? 'faculty-bg' :
+        (${#authorization.expression('hasRole(''STUDENT'')')} ? 'student-bg' : ''))">
+
+    <h1 align="center">Dashboard</h1>
+    <hr color="red">
+    <p>You are logged in successfully.</p>
+
+    <p>
+        Logged in as:
+        <span sec:authentication="name"></span>
+    </p>
+
+    <!-- Admin -->
+    <div sec:authorize="hasRole('ADMIN')">
+        <h2>Admin</h2>
+        <ul>
+            <li><a th:href="@{/admin/users}">Manage Users</a></li>
+            <li><a th:href="@{/admin/courses}">Manage Courses</a></li>
+        </ul>
+    </div>
+
+    <!-- Faculty -->
+    <div sec:authorize="hasRole('FACULTY')">
+        <h2>Faculty</h2>
+        <ul>
+            <li><a th:href="@{/faculty/students}">View Students</a></li>
+            <li><a th:href="@{/faculty/grades}">Manage Grades</a></li>
+        </ul>
+    </div>
+
+    <!-- Student -->
+    <div sec:authorize="hasRole('STUDENT')">
+        <h2>Student</h2>
+        <ul>
+            <li><a th:href="@{/student/courses}">My Courses</a></li>
+            <li><a th:href="@{/student/profile}">My Profile</a></li>
+        </ul>
+    </div>
+
+    <hr>
+
+    <form th:action="@{/logout}" method="post">
+        <button>Logout</button>
+    </form>
+    <footer class="app-footer">
+    © 2026 Prathita Kumar Madhusudhana - Student Management System
+</footer>
+
+
+</body>
+</html>

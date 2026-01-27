@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>My Profile</title>
+    <link rel="stylesheet" th:href="@{/css/style-student.css}">
+</head>
+<body>
+
+<h1>My Profile</h1>
+
+<div th:if="${student != null}">
+    <table border="1" cellpadding="8" cellspacing="0">
+        <tr>
+            <td><strong>Name</strong></td>
+            <td th:text="${student.name}"></td>
+        </tr>
+
+        <tr>
+            <td><strong>Email</strong></td>
+            <td th:text="${student.email}"></td>
+        </tr>
+
+        <tr>
+            <td><strong>Department</strong></td>
+            <td th:text="${student.department}"></td>
+        </tr>
+
+        <tr>
+            <td><strong>Program</strong></td>
+            <td th:text="${student.program}"></td>
+        </tr>
+
+        <tr>
+            <td><strong>Current Semester</strong></td>
+            <td th:text="${student.currentSemester}"></td>
+        </tr>
+
+        <tr>
+            <td><strong>Total Credits Earned</strong></td>
+            <td>Not Available Yet</td>
+        </tr>
+
+        <tr>
+            <td><strong>CGPA</strong></td>
+            <td>Not Available Yet</td>
+        </tr>
+
+        <tr>
+            <td><strong>Academic Standing</strong></td>
+            <td>Not Available Yet</td>
+        </tr>
+    </table>
+</div>
+
+<div th:if="${student == null}">
+    <p style="color:red;">Student profile not found</p>
+</div>
+
+<br>
+<form th:action="@{/student/courses}" method="get">
+    <button>My Courses</button>
+</form><br>
+<form th:action="@{/dashboard}" method="get">
+    <button>Back to Dashboard</button>
+
+</body>
+</html>

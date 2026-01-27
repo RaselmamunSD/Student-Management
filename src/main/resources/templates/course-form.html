@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <title>Add Course</title>
+    </head>
+    <body>
+        <link rel="stylesheet" th:href="@{/css/style-admin.css}">
+        <h1>Add Course</h1>
+        <form th:action="@{/courses}" th:object="${course}" method="post">
+            <label>Course Name:</label>
+            <input type="text" th:field="*{courseName}"/>
+            <br><br>
+            
+            <label>Faculty:</label>
+            <input type="text" th:field="*{faculty}"/>
+            <br><br>
+            
+            <label>Credits</label>
+            <input type="number" th:field="*{credits}"/>
+            <br><br>
+            
+            <button type="submit">Save</button>
+        </form>
+    
+        
+        <br>
+        <a th:href="@{/courses}">Back to Course List</a>
+        <footer class="app-footer">
+    © 2026 Prathita Kumar Madhusudhana - Student Management System
+</footer>
+
+    </body>
+</html>

@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Register User</title>
+</head>
+<body>
+    <p th:if="${error}" style="color:red;">
+    <span th:text="${error}"></span>
+</p>
+
+    <link rel="stylesheet" th:href="@{/css/style-admin.css}">
+
+<h1>Admin - Register New User</h1>
+
+<form th:action="@{/admin/register}" th:object="${user}" method="post">
+
+    <label>Username:</label><br>
+    <input type="text" th:field="*{username}" required>
+    <br><br>
+
+    <label>Password:</label><br>
+    <input type="password" th:field="*{password}" required>
+    <br><br>
+
+    <label>Role:</label><br>
+    <select name="role" required>
+        <option value="STUDENT">Student</option>
+        <option value="FACULTY">Faculty</option>
+        <option value="ADMIN">Admin</option>
+    </select>
+    <br><br>
+
+    <button type="submit">Register User</button>
+
+</form>
+
+<br>
+<form th:action="@{/admin/users}">
+    <button>Back to User Management</button>
+</form>
+<footer class="app-footer">
+    © 2026 Prathita Kumar Madhusudhana - Student Management System
+</footer>
+
+</body>
+</html>

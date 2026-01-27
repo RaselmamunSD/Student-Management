@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Admin - Manage Users</title>
+    <link rel="stylesheet" th:href="@{/css/style-admin.css}">
+</head>
+
+<body>
+
+<h1>Admin Panel</h1>
+<h2>Manage Users</h2>
+
+<p>This page is controlled by Admin Controller</p>
+
+<p th:if="${param.error == 'linked'}" style="color:red;">
+    Cannot delete user: Student profile exists.
+</p>
+
+<table border="1" cellpadding="8">
+    <tr>
+        <th>Username</th>
+        <th>Email</th>
+        <th>Role</th>
+        <th>Action</th>
+    </tr>
+
+    <tr th:each="user : ${users}">
+        <td th:text="${user.username}"></td>
+        <td th:text="${user.email}"></td>
+        <td th:text="${user.role}"></td>
+        <td>
+            <form th:action="@{'/admin/users/' + ${user.id}}"
+                  method="post"
+                  style="display:inline;">
+
+                <input type="hidden" name="_method" value="delete"/>
+
+                <button type="submit"
+                        onclick="return confirm('Are you sure you want to delete this user?')">
+                    Delete
+                </button>
+            </form>
+        </td>
+    </tr>
+</table>
+
+<br>
+
+<ul>
+    <li><a th:href="@{/students}">Go to Student Records</a></li><br>
+    <li><a th:href="@{/admin/register}">Register New User</a></li><br>
+</ul>
+
+<form th:action="@{/dashboard}" method="get">
+    <button>Back to Dashboard</button>
+</form>
+
+<footer class="app-footer">
+    © 2026 Prathita Kumar Madhusudhana - Student Management System
+</footer>
+
+</body>
+</html>

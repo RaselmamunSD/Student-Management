@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Assign Courses</title>
+</head>
+<body>
+        <link rel="stylesheet" th:href="@{/css/style-admin.css}">
+<h1>Assign Courses to Student</h1>
+
+<form th:action="@{/admin/assign-courses}" method="post">
+
+    <label>Select Student:</label>
+    <select name="studentId" required>
+        <option value="">-- Select Student --</option>
+        <option th:each="s : ${students}"
+                th:value="${s.id}"
+                th:text="${s.name}">
+        </option>
+    </select>
+
+    <br><br>
+
+    <label>Select Courses:</label><br>
+    <div th:each="c : ${courses}">
+        <input type="checkbox" name="courseIds"
+               th:value="${c.id}" />
+        <span th:text="${c.courseName}"></span>
+    </div>
+
+    <br>
+    <button type="submit">Assign Courses</button>
+
+</form>
+
+<br>
+        <form th:action="@{/admin/courses}" method="get">
+            <button>Back to Course Management</button>
+        </form>
+<br>
+        <form th:action="@{/dashboard}" method="get">
+            <button>Back to Dashboard</button>
+        </form>
+<footer class="app-footer">
+    © 2026 Prathita Kumar Madhusudhana - Student Management System
+</footer>
+
+</body>
+</html>

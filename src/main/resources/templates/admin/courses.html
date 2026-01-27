@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Admin - Manage Courses</title>
+    </head>
+    <body>        <link rel="stylesheet" th:href="@{/css/style-admin.css}">
+
+        <h1>Admin Panel</h1>
+        <h2>Manage Users</h2>
+        
+        <p>This page is controlled by Admin Controller</p>
+        
+        <ul>
+            <li><a th:href="@{/courses}">Open Course Management</a></li><br>
+            <li><a th:href="@{/admin/assign-courses}">Assign Courses</a></li><br>
+            
+        </ul>
+       <form th:action="@{/dashboard}" method="get">
+        <button>Back to Dashboard</button>
+       </form>
+        <footer class="app-footer">
+    © 2026 Prathita Kumar Madhusudhana - Student Management System
+</footer>
+
+    </body>
+</html>
+
+

@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>My Courses</title>
+    <link rel="stylesheet" th:href="@{/css/style-student.css}">
+</head>
+<body>
+
+<h1>My Courses</h1>
+
+<div th:if="${#lists.isEmpty(courses)}">
+    <p>No courses enrolled.</p>
+</div>
+
+<ul th:if="${!#lists.isEmpty(courses)}">
+    <li th:each="course : ${courses}">
+        <span th:text="${course.courseName}"></span>
+    </li>
+</ul>
+
+<br>
+<form th:action="@{/student/profile}" method="get">
+    <button>My Profile</button>
+</form><br>
+<form th:action="@{/dashboard}" method="get">
+    <button>Back to Dashboard</button>
+</form>
+
+
+</body>
+</html>
