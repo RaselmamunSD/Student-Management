@@ -2,10 +2,8 @@ package com.example.Student.Management.service;
 
 import com.example.Student.Management.Model.Student;
 import com.example.Student.Management.Model.User;
-import com.example.Student.Management.Model.Course;
 import com.example.Student.Management.repository.StudentRepository;
 import com.example.Student.Management.repository.UserRepository;
-import com.example.Student.Management.repository.CourseRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -18,13 +16,14 @@ public class StudentServiceImpl implements StudentService {
 
     private final StudentRepository studentRepository;
     private final UserRepository userRepository;
-    private final CourseRepository courseRepository;
+    private final EnrollmentService enrollmentService;
 
     public StudentServiceImpl(StudentRepository studentRepository,
-                              UserRepository userRepository, CourseRepository courseRepository) {
+                              UserRepository userRepository,
+                              EnrollmentService enrollmentService) {
         this.studentRepository = studentRepository;
         this.userRepository = userRepository;
-        this.courseRepository=courseRepository;
+        this.enrollmentService = enrollmentService;
     }
 
 
@@ -52,28 +51,12 @@ public class StudentServiceImpl implements StudentService {
     @Override
     public Student getStudentByUsername(String username) {
 
-        Optional<User> userOpt = userRepository.findByUsername(username);
-
-        if (userOpt.isEmpty()) {
-            return null;
-        }
-
-        return studentRepository.findByUser(userOpt.get()).orElse(null);
+        return studentRepository.findDetailedByUsername(username).orElse(null);
     }
     
      @Override
     public void assignCoursesToStudent(Long studentId, List<Long> courseIds) {
-
-        Student student = studentRepository.findById(studentId).orElse(null);
-        if (student == null) return;
-
-        Set<Course> courses = courseRepository
-                .findAllById(courseIds)
-                .stream()
-                .collect(Collectors.toSet());
-
-        student.setCourses(courses);
-        studentRepository.save(student);
+        enrollmentService.assignCoursesToStudent(studentId, courseIds);
     }
     
     @Override
@@ -111,7 +94,7 @@ public class StudentServiceImpl implements StudentService {
         if (students.size() <= 1) continue;
 
         Student toKeep = students.stream()
-                .filter(s -> s.getCourses() != null && !s.getCourses().isEmpty())
+                .filter(s -> s.getEnrollments() != null && !s.getEnrollments().isEmpty())
                 .findFirst()
                 .orElse(students.get(0));
 

@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Enter marks</title>
+    <link rel="stylesheet" th:href="@{/css/style-faculty.css}">
+</head>
+<body>
+<h1 th:text="${course.courseName}">Course</h1>
+<p th:if="${param.saved != null}" style="color:green;">Grades saved.</p>
+<form th:action="@{/faculty/grades/course/{id}(id=${course.id})}" method="post">
+    <label>Semester label (optional, for transcript): <input type="text" name="semester" placeholder="e.g. Spring 2026"/></label>
+    <table border="1" cellpadding="6">
+        <tr>
+            <th>Student</th>
+            <th>Marks (0–100)</th>
+        </tr>
+        <tr th:each="e : ${enrollments}">
+            <td th:text="${e.student.name}"></td>
+            <td>
+                <input type="number" step="0.1" min="0" max="100"
+                       th:name="${'marks_' + e.id}"
+                       th:value="${e.marks}"/>
+            </td>
+        </tr>
+    </table>
+    <p th:if="${#lists.isEmpty(enrollments)}">No approved enrollments for this course.</p>
+    <button type="submit">Save grades</button>
+</form>
+<p><a th:href="@{/faculty/grades}">Back</a></p>
+</body>
+</html>

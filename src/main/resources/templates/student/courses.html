@@ -8,15 +8,22 @@
 
 <h1>My Courses</h1>
 
+<div th:if="${student != null}">
+    <p>CGPA: <strong th:text="${#numbers.formatDecimal(student.cgpa, 1, 2)}"></strong></p>
+</div>
+
 <div th:if="${#lists.isEmpty(courses)}">
-    <p>No courses enrolled.</p>
+    <p>No approved courses yet. Browse the <a th:href="@{/student/catalog}">catalog</a> to request enrollment.</p>
 </div>
 
 <ul th:if="${!#lists.isEmpty(courses)}">
     <li th:each="course : ${courses}">
         <span th:text="${course.courseName}"></span>
+        (<span th:text="${course.credits}"></span> cr)
     </li>
 </ul>
+
+<p><a th:href="@{/student/transcript.pdf}">Download transcript (PDF)</a></p>
 
 <br>
 <form th:action="@{/student/profile}" method="get">

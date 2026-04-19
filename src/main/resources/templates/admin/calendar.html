@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Academic calendar (admin)</title>
+    <link rel="stylesheet" th:href="@{/css/style-admin.css}">
+</head>
+<body>
+<h1>Institution calendar</h1>
+<p th:if="${param.saved != null}" style="color:green;">Event saved.</p>
+<p th:if="${param.deleted != null}" style="color:orange;">Event removed.</p>
+
+<h2>Add event (holidays, exams, registration)</h2>
+<form th:action="@{/admin/calendar/events}" method="post">
+    <label>Title <input type="text" name="title" required/></label><br/><br/>
+    <label>Description<br/><textarea name="description" rows="3" cols="50"></textarea></label><br/><br/>
+    <label>Type
+        <select name="eventType">
+            <option th:each="t : ${eventTypes}" th:value="${t.name()}" th:text="${t.name()}"></option>
+        </select>
+    </label><br/><br/>
+    <label>Start date <input type="date" name="startDate" required/></label><br/><br/>
+    <label>End date (optional) <input type="date" name="endDate"/></label><br/><br/>
+    <button type="submit">Save event</button>
+</form>
+
+<h2>Scheduled events</h2>
+<ul>
+    <li th:each="ev : ${events}">
+        <strong th:text="${ev.title}"></strong>
+        (<span th:text="${ev.eventType}"></span>)
+        <span th:text="${ev.startDate}"></span>
+        —
+        <span th:text="${ev.endDate}"></span>
+        <form th:action="@{/admin/calendar/events/{id}/delete(id=${ev.id})}" method="post" style="display:inline;">
+            <button type="submit">Delete</button>
+        </form>
+    </li>
+</ul>
+<p><a th:href="@{/academic/calendar}">View public calendar</a> · <a th:href="@{/dashboard}">Dashboard</a></p>
+</body>
+</html>

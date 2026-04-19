@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Assignments</title>
+    <link rel="stylesheet" th:href="@{/css/style-student.css}">
+</head>
+<body>
+<h1>Assignments</h1>
+<p th:if="${param.submitted != null}" style="color:green;">Submission received.</p>
+<p th:if="${param.error != null}" style="color:#b00;">Upload failed — choose a file.</p>
+
+<div th:if="${#lists.isEmpty(assignments)}">
+    <p>No assignments for your enrolled courses.</p>
+</div>
+
+<table border="1" cellpadding="8" th:if="${!#lists.isEmpty(assignments)}">
+    <tr>
+        <th>Course</th>
+        <th>Title</th>
+        <th>Due</th>
+        <th>Submit</th>
+    </tr>
+    <tr th:each="a : ${assignments}">
+        <td th:text="${a.course.courseName}"></td>
+        <td th:text="${a.title}"></td>
+        <td th:text="${#dates.format(new java.util.Date(a.dueAt.toEpochMilli()), 'yyyy-MM-dd HH:mm')}"></td>
+        <td>
+            <form th:action="@{/student/assignments/{id}/submit(id=${a.id})}" method="post" enctype="multipart/form-data">
+                <input type="file" name="file" required/>
+                <button type="submit">Upload</button>
+            </form>
+        </td>
+    </tr>
+</table>
+<p><a th:href="@{/dashboard}">Dashboard</a></p>
+</body>
+</html>

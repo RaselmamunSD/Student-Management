@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>My attendance</title>
+    <link rel="stylesheet" th:href="@{/css/style-student.css}">
+</head>
+<body>
+<h1>Attendance</h1>
+<p>Students below <strong th:text="${threshold}">75</strong>% attendance are flagged for follow-up.</p>
+
+<table border="1" cellpadding="8" th:if="${enrollments != null}">
+    <tr>
+        <th>Course</th>
+        <th>Attendance %</th>
+        <th>Status</th>
+    </tr>
+    <tr th:each="e : ${enrollments}">
+        <td th:text="${e.course.courseName}"></td>
+        <td th:text="${attendancePct.get(e.id)} + '%'"></td>
+        <td>
+            <span th:if="${lowAttendance.get(e.id)}" style="color:#b00;font-weight:bold;">Below threshold</span>
+            <span th:if="${!lowAttendance.get(e.id)}">OK</span>
+        </td>
+    </tr>
+</table>
+<p><a th:href="@{/dashboard}">Dashboard</a></p>
+</body>
+</html>

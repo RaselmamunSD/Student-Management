@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Timetable</title>
+    <link rel="stylesheet" th:href="@{/css/style-faculty.css}">
+</head>
+<body>
+<h1 th:text="'Timetable — ' + ${course.courseName}">Timetable</h1>
+<p th:if="${param.saved != null}" style="color:green;">Slot saved.</p>
+
+<table border="1" cellpadding="6">
+    <tr>
+        <th>Day</th>
+        <th>Start</th>
+        <th>End</th>
+        <th>Room</th>
+        <th>Semester</th>
+        <th></th>
+    </tr>
+    <tr th:each="t : ${entries}">
+        <td th:text="${t.dayOfWeek}"></td>
+        <td th:text="${t.startTime}"></td>
+        <td th:text="${t.endTime}"></td>
+        <td th:text="${t.room}"></td>
+        <td th:text="${t.semesterLabel}"></td>
+        <td>
+            <form th:action="@{/faculty/timetable/delete/{eid}(eid=${t.id})}" method="post">
+                <input type="hidden" name="courseId" th:value="${course.id}"/>
+                <button type="submit">Delete</button>
+            </form>
+        </td>
+    </tr>
+</table>
+
+<h2>Add weekly slot</h2>
+<form th:action="@{/faculty/timetable/course/{id}(id=${course.id})}" method="post">
+    <label>Day
+        <select name="dayOfWeek" required>
+            <option>MONDAY</option>
+            <option>TUESDAY</option>
+            <option>WEDNESDAY</option>
+            <option>THURSDAY</option>
+            <option>FRIDAY</option>
+            <option>SATURDAY</option>
+            <option>SUNDAY</option>
+        </select>
+    </label><br/><br/>
+    <label>Start <input type="time" name="startTime" required/></label><br/><br/>
+    <label>End <input type="time" name="endTime" required/></label><br/><br/>
+    <label>Room <input type="text" name="room"/></label><br/><br/>
+    <label>Semester label <input type="text" name="semesterLabel" placeholder="Spring 2026"/></label><br/><br/>
+    <button type="submit">Add slot</button>
+</form>
+<p><a th:href="@{/faculty/grades}">Back</a></p>
+</body>
+</html>

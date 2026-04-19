@@ -36,18 +36,13 @@
         </tr>
 
         <tr>
-            <td><strong>Total Credits Earned</strong></td>
-            <td>Not Available Yet</td>
-        </tr>
-
-        <tr>
-            <td><strong>CGPA</strong></td>
-            <td>Not Available Yet</td>
+            <td><strong>CGPA (4.0 scale)</strong></td>
+            <td th:text="${#numbers.formatDecimal(student.cgpa, 1, 2)}"></td>
         </tr>
 
         <tr>
             <td><strong>Academic Standing</strong></td>
-            <td>Not Available Yet</td>
+            <td th:text="${student.academicStanding}"></td>
         </tr>
     </table>
 </div>
@@ -58,10 +53,16 @@
 
 <br>
 <form th:action="@{/student/courses}" method="get">
-    <button>My Courses</button>
-</form><br>
+    <button type="submit">My Courses</button>
+</form>
+<br/>
+<form th:action="@{/student/transcript.pdf}" method="get">
+    <button type="submit">Download transcript (PDF)</button>
+</form>
+<br/>
 <form th:action="@{/dashboard}" method="get">
-    <button>Back to Dashboard</button>
+    <button type="submit">Back to Dashboard</button>
+</form>
 
 </body>
 </html>

@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <title>Academic calendar &amp; timetable</title>
+    <link rel="stylesheet" th:href="@{/css/style-dashboard.css}">
+</head>
+<body>
+<h1>Academic calendar</h1>
+
+<h2>Institution events</h2>
+<ul th:if="${events != null}">
+    <li th:each="ev : ${events}">
+        <strong th:text="${ev.title}"></strong>
+        — <span th:text="${ev.eventType}"></span>
+        — <span th:text="${ev.startDate}"></span>
+        <span th:if="${ev.endDate != null && ev.endDate != ev.startDate}" th:text="'– ' + ${ev.endDate}"></span>
+        <div th:if="${ev.description}" th:text="${ev.description}" style="margin-left:1rem;color:#444;"></div>
+    </li>
+</ul>
+
+<h2>Class timetable</h2>
+<p sec:authorize="hasRole('STUDENT')">Shows weekly slots for courses you are enrolled in.</p>
+<p sec:authorize="hasRole('FACULTY')">Shows weekly slots for courses you teach.</p>
+<p sec:authorize="hasRole('ADMIN')">Shows all course timetable entries.</p>
+
+<table border="1" cellpadding="6" th:if="${timetable != null}">
+    <tr>
+        <th>Course</th>
+        <th>Day</th>
+        <th>Time</th>
+        <th>Room</th>
+        <th>Semester</th>
+    </tr>
+    <tr th:each="t : ${timetable}">
+        <td th:text="${t.course.courseName}"></td>
+        <td th:text="${t.dayOfWeek}"></td>
+        <td th:text="|${t.startTime} – ${t.endTime}|"></td>
+        <td th:text="${t.room}"></td>
+        <td th:text="${t.semesterLabel}"></td>
+    </tr>
+</table>
+<p th:if="${#lists.isEmpty(timetable)}">No timetable entries yet. Faculty can add weekly slots from the Grades page.</p>
+
+<p><a th:href="@{/dashboard}">Dashboard</a></p>
+</body>
+</html>

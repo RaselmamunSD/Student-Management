@@ -28,6 +28,9 @@
         <ul>
             <li><a th:href="@{/admin/users}">Manage Users</a></li>
             <li><a th:href="@{/admin/courses}">Manage Courses</a></li>
+            <li><a th:href="@{/admin/enrollment-requests}">Enrollment requests</a></li>
+            <li><a th:href="@{/admin/calendar}">Institution calendar</a></li>
+            <li><a th:href="@{/academic/calendar}">View calendar &amp; timetables</a></li>
         </ul>
     </div>
 
@@ -36,7 +39,9 @@
         <h2>Faculty</h2>
         <ul>
             <li><a th:href="@{/faculty/students}">View Students</a></li>
-            <li><a th:href="@{/faculty/grades}">Manage Grades</a></li>
+            <li><a th:href="@{/faculty/grades}">Grades, attendance &amp; timetable</a></li>
+            <li><a th:href="@{/faculty/assignments}">Assignments</a></li>
+            <li><a th:href="@{/academic/calendar}">Calendar &amp; timetable</a></li>
         </ul>
     </div>
 
@@ -44,8 +49,13 @@
     <div sec:authorize="hasRole('STUDENT')">
         <h2>Student</h2>
         <ul>
-            <li><a th:href="@{/student/courses}">My Courses</a></li>
+            <li><a th:href="@{/student/courses}">My Courses &amp; CGPA</a></li>
+            <li><a th:href="@{/student/catalog}">Course catalog &amp; enrollment</a></li>
+            <li><a th:href="@{/student/assignments}">Assignments</a></li>
+            <li><a th:href="@{/student/attendance}">Attendance</a></li>
+            <li><a th:href="@{/student/transcript.pdf}">Transcript (PDF)</a></li>
             <li><a th:href="@{/student/profile}">My Profile</a></li>
+            <li><a th:href="@{/academic/calendar}">Calendar &amp; timetable</a></li>
         </ul>
     </div>
 

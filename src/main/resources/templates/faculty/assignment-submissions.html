@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Submissions</title>
+    <link rel="stylesheet" th:href="@{/css/style-faculty.css}">
+</head>
+<body>
+<h1 th:text="${assignment.title}">Assignment</h1>
+<p th:text="${assignment.course.courseName}"></p>
+<p th:if="${param.graded != null}" style="color:green;">Grade saved.</p>
+
+<table border="1" cellpadding="6">
+    <tr>
+        <th>Student</th>
+        <th>Submitted</th>
+        <th>File</th>
+        <th>Grade</th>
+    </tr>
+    <tr th:each="s : ${submissions}">
+        <td th:text="${s.student.name}"></td>
+        <td th:text="${#dates.format(new java.util.Date(s.submittedAt.toEpochMilli()), 'yyyy-MM-dd HH:mm')}"></td>
+        <td th:text="${s.originalFileName}"></td>
+        <td>
+            <form th:action="@{/faculty/submissions/{id}/grade(id=${s.id})}" method="post" style="display:inline;">
+                <input type="hidden" name="assignmentId" th:value="${assignment.id}"/>
+                <input type="number" step="0.1" name="grade" th:value="${s.grade}" placeholder="0-100"/>
+                <button type="submit">Save</button>
+            </form>
+        </td>
+    </tr>
+</table>
+<p><a th:href="@{/faculty/assignments}">Back</a></p>
+</body>
+</html>

@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Course catalog</title>
+    <link rel="stylesheet" th:href="@{/css/style-student.css}">
+</head>
+<body>
+<h1>Course catalog &amp; enrollment</h1>
+<p th:if="${param.requested != null}" style="color:green;">Enrollment request submitted. An administrator will review it.</p>
+<p th:if="${param.error != null}" style="color:#b00;">Could not process request.</p>
+
+<table border="1" cellpadding="8" th:if="${catalogRows != null}">
+    <tr>
+        <th>Course</th>
+        <th>Credits</th>
+        <th>Faculty</th>
+        <th>Your status</th>
+        <th></th>
+    </tr>
+    <tr th:each="row : ${catalogRows}">
+        <td th:text="${row.course.courseName}"></td>
+        <td th:text="${row.course.credits}"></td>
+        <td th:text="${row.course.faculty}"></td>
+        <td th:text="${row.status}"></td>
+        <td>
+            <form th:if="${row.status == 'OPEN' || row.status == 'REJECTED'}" method="post" th:action="@{/student/catalog/request}">
+                <input type="hidden" name="courseId" th:value="${row.course.id}"/>
+                <button type="submit">Request enrollment</button>
+            </form>
+            <span th:if="${row.status == 'PENDING'}">Awaiting approval</span>
+            <span th:if="${row.status == 'APPROVED'}">Enrolled</span>
+        </td>
+    </tr>
+</table>
+<p><a th:href="@{/dashboard}">Dashboard</a></p>
+</body>
+</html>

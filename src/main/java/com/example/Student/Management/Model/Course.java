@@ -1,7 +1,15 @@
 package com.example.Student.Management.Model;
 
-import jakarta.persistence.*;
-import java.util.*;
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 public class Course {
@@ -14,8 +22,14 @@ public class Course {
     private String faculty;
     private int credits;
 
-    @ManyToMany(mappedBy = "courses")
-    private Set<Student> students = new HashSet<>();
+    @OneToMany(mappedBy = "course", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    private List<Enrollment> enrollments = new ArrayList<>();
+
+    @OneToMany(mappedBy = "course", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    private List<Assignment> assignments = new ArrayList<>();
+
+    @OneToMany(mappedBy = "course", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    private List<TimetableEntry> timetableEntries = new ArrayList<>();
 
     public Course() {}
 
@@ -57,11 +71,27 @@ public class Course {
         this.credits = credits;
     }
 
-    public Set<Student> getStudents() {
-        return students;
+    public List<Enrollment> getEnrollments() {
+        return enrollments;
     }
 
-    public void setStudents(Set<Student> students) {
-        this.students = students;
+    public void setEnrollments(List<Enrollment> enrollments) {
+        this.enrollments = enrollments;
+    }
+
+    public List<Assignment> getAssignments() {
+        return assignments;
+    }
+
+    public void setAssignments(List<Assignment> assignments) {
+        this.assignments = assignments;
+    }
+
+    public List<TimetableEntry> getTimetableEntries() {
+        return timetableEntries;
+    }
+
+    public void setTimetableEntries(List<TimetableEntry> timetableEntries) {
+        this.timetableEntries = timetableEntries;
     }
 }

@@ -20,11 +20,20 @@ public class CourseServiceImpl implements CourseService
      }
      
      @Override
-     public List<Course> getAllCourses()
-     {
+     public List<Course> getAllCourses() {
          return cr.findAll();
      }
-     
+
+     @Override
+     public Course getCourseById(Long id) {
+         return cr.findById(id).orElse(null);
+     }
+
+     @Override
+     public List<Course> getCoursesByFacultyUsername(String facultyUsername) {
+         return cr.findByFacultyIgnoreCase(facultyUsername);
+     }
+
      @Override
      public void deleteCourseById(Long id)
      {

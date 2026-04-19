@@ -1,18 +1,22 @@
 package com.example.Student.Management.Model;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.ManyToMany;
-import jakarta.persistence.JoinTable;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
-import jakarta.persistence.FetchType;
 import jakarta.persistence.Transient;
 
-import java.util.HashSet;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
+
+import com.example.Student.Management.util.GradeUtil;
 
 @Entity
 public class Student {
@@ -24,17 +28,12 @@ public class Student {
     private String name;
     private String email;
     private String department;
-    private String program; 
+    private String program;
     private int currentSemester;
     private int totalCreditsEarned;
 
-    @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(
-        name = "student_courses",
-        joinColumns = @JoinColumn(name = "student_id"),
-        inverseJoinColumns = @JoinColumn(name = "course_id")
-    )
-    private Set<Course> courses = new HashSet<>();
+    @OneToMany(mappedBy = "student", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    private List<Enrollment> enrollments = new ArrayList<>();
 
     @OneToOne
     @JoinColumn(name = "user_id")
@@ -47,7 +46,6 @@ public class Student {
         this.email = email;
         this.department = department;
     }
-
 
     public Long getId() {
         return id;
@@ -68,7 +66,7 @@ public class Student {
     public String getEmail() {
         return email;
     }
-    
+
     public void setEmail(String email) {
         this.email = email;
     }
@@ -76,7 +74,7 @@ public class Student {
     public String getDepartment() {
         return department;
     }
-    
+
     public void setDepartment(String department) {
         this.department = department;
     }
@@ -105,41 +103,47 @@ public class Student {
         this.totalCreditsEarned = totalCreditsEarned;
     }
 
-    public Set<Course> getCourses() {
-        return courses;
+    public List<Enrollment> getEnrollments() {
+        return enrollments;
     }
-    
-    public void setCourses(Set<Course> courses) {
-        this.courses = courses;
+
+    public void setEnrollments(List<Enrollment> enrollments) {
+        this.enrollments = enrollments;
+    }
+
+    /** Approved enrollments only — for display as "my courses". */
+    @Transient
+    public Set<Course> getCourses() {
+        return enrollments.stream()
+                .filter(e -> e.getStatus() == EnrollmentStatus.APPROVED)
+                .map(Enrollment::getCourse)
+                .collect(Collectors.toSet());
     }
 
     public User getUser() {
         return user;
     }
-    
+
     public void setUser(User user) {
         this.user = user;
     }
 
     @Transient
     public double getCgpa() {
-        if (totalCreditsEarned <= 0) {
-            return 0.0;
-        }
-        double cgpa = totalCreditsEarned / 10.0;
-        return Math.round(cgpa * 100.0) / 100.0;
+        return GradeUtil.computeCgpa(enrollments);
     }
 
     @Transient
     public String getAcademicStanding() {
         double cgpa = getCgpa();
-
-        if (cgpa >= 7.0) {
+        if (cgpa >= 3.5) {
             return "Good Standing";
-        } else if (cgpa >= 5.0) {
+        } else if (cgpa >= 2.5) {
             return "Academic Warning";
-        } else {
-            return "Probation";
         }
+        if (cgpa <= 0) {
+            return "—";
+        }
+        return "Probation";
     }
 }

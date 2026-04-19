@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Assignments</title>
+    <link rel="stylesheet" th:href="@{/css/style-faculty.css}">
+</head>
+<body>
+<h1>Assignments</h1>
+<p th:if="${param.created != null}" style="color:green;">Assignment created.</p>
+<p th:if="${param.error != null}" style="color:#b00;">Action denied.</p>
+
+<h2>Create assignment</h2>
+<p th:if="${#lists.isEmpty(courses)}">No courses linked to your account.</p>
+<form th:if="${!#lists.isEmpty(courses)}" method="post" th:action="@{/faculty/assignments}">
+    <label>Course
+        <select name="courseId" required>
+            <option th:each="c : ${courses}" th:value="${c.id}" th:text="${c.courseName}"></option>
+        </select>
+    </label><br/><br/>
+    <label>Title <input type="text" name="title" required/></label><br/><br/>
+    <label>Description<br/><textarea name="description" rows="4" cols="50"></textarea></label><br/><br/>
+    <label>Due (local date/time) <input type="datetime-local" name="dueAt" required/></label><br/><br/>
+    <button type="submit">Post assignment</button>
+</form>
+
+<h2>Your assignments</h2>
+<ul>
+    <li th:each="a : ${assignments}">
+        <span th:text="${a.title}"></span> —
+        <span th:text="${a.course.courseName}"></span> —
+        due <span th:text="${#dates.format(new java.util.Date(a.dueAt.toEpochMilli()), 'yyyy-MM-dd HH:mm')}"></span>
+        — <a th:href="@{/faculty/assignments/{id}/submissions(id=${a.id})}">Submissions</a>
+    </li>
+</ul>
+<p><a th:href="@{/dashboard}">Dashboard</a></p>
+</body>
+</html>

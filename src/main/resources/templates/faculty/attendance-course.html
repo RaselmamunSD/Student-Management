@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Attendance</title>
+    <link rel="stylesheet" th:href="@{/css/style-faculty.css}">
+</head>
+<body>
+<h1 th:text="'Attendance — ' + ${course.courseName}">Attendance</h1>
+<p th:if="${param.saved != null}" style="color:green;">Attendance saved.</p>
+<form method="get" th:action="@{/faculty/attendance/course/{id}(id=${course.id})}">
+    <label>Class date: <input type="date" name="classDate" th:value="${classDate}"/></label>
+    <button type="submit">Load</button>
+</form>
+<form th:action="@{/faculty/attendance/course/{id}(id=${course.id})}" method="post">
+    <input type="hidden" name="classDate" th:value="${classDate}"/>
+    <table border="1" cellpadding="6">
+        <tr><th>Student</th><th>Present</th></tr>
+        <tr th:each="e : ${enrollments}">
+            <td th:text="${e.student.name}"></td>
+            <td><input type="checkbox" th:name="presentEnrollmentIds" th:value="${e.id}"/></td>
+        </tr>
+    </table>
+    <button type="submit">Save attendance</button>
+</form>
+<p><a th:href="@{/faculty/grades}">Back</a></p>
+</body>
+</html>

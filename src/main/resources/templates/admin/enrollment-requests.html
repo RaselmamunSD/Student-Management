@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Enrollment requests</title>
+    <link rel="stylesheet" th:href="@{/css/style-admin.css}">
+</head>
+<body>
+<h1>Pending enrollment requests</h1>
+<p th:if="${param.approved != null}" style="color:green;">Approved.</p>
+<p th:if="${param.rejected != null}" style="color:orange;">Rejected.</p>
+
+<table border="1" cellpadding="8" th:if="${pending != null}">
+    <tr>
+        <th>Student</th>
+        <th>Course</th>
+        <th>Requested</th>
+        <th></th>
+    </tr>
+    <tr th:each="e : ${pending}">
+        <td th:text="${e.student.name}"></td>
+        <td th:text="${e.course.courseName}"></td>
+        <td th:text="${e.requestedAt}"></td>
+        <td>
+            <form th:action="@{/admin/enrollment-requests/{id}/approve(id=${e.id})}" method="post" style="display:inline;">
+                <button type="submit">Approve</button>
+            </form>
+            <form th:action="@{/admin/enrollment-requests/{id}/reject(id=${e.id})}" method="post" style="display:inline;">
+                <button type="submit">Reject</button>
+            </form>
+        </td>
+    </tr>
+</table>
+<p th:if="${#lists.isEmpty(pending)}">No pending requests.</p>
+<p><a th:href="@{/dashboard}">Dashboard</a></p>
+</body>
+</html>
